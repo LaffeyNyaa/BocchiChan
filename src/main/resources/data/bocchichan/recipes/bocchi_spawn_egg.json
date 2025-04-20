@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+      "BPP",
+      "YPP",
+      "   "
+    ],
+    "key": {
+      "B": {
+        "item": "minecraft:light_blue_wool"
+      },
+      "Y": {
+        "item": "minecraft:yellow_wool"
+      },
+      "P": {
+        "item": "minecraft:pink_wool"
+      }
+    },
+    "result": {
+      "item": "bocchichan:bocchi_spawn_egg",
+      "count": 1
+  }
+}
