@@ -18,7 +18,7 @@ public class BocchiEntityModel extends EntityModel<BocchiEntity> {
     private final ModelPart hairpin2;
 
     public BocchiEntityModel(ModelPart root) {
-        this.hairpin2 = root.getChild("hairpin2");
+        hairpin2 = root.getChild("hairpin2");
     }
 
     @SuppressWarnings("unused")

@@ -3,6 +3,8 @@ package com.laffeynyaa.bocchichan;
 import com.laffeynyaa.bocchichan.entity.BocchiEntity;
 import com.laffeynyaa.bocchichan.handler.BocchiScreenHandler;
 import com.laffeynyaa.bocchichan.network.NetworkingConstants;
+import com.laffeynyaa.bocchichan.state.StateSaverAndLoader;
+
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -31,16 +33,17 @@ public class BocchiChan implements ModInitializer {
                 (server, player, handler, buf, responseSender) -> {
                     BocchiEntity bocchiEntity = (BocchiEntity) server
                             .getWorld(World.OVERWORLD)
-                            .getEntity(buf.readUuid());
-
-                    bocchiEntity.setOwner(player);
+                            .getEntityById(buf.readInt());
+                    if (bocchiEntity.getOwner() == null) {
+                        bocchiEntity.setOwner(player);
+                    }
                 });
 
         ServerPlayNetworking.registerGlobalReceiver(NetworkingConstants.BOCCHI_SIT_PACKET_ID,
                 (server, player, handler, buf, responseSender) -> {
                     BocchiEntity bocchiEntity = (BocchiEntity) server
                             .getWorld(World.OVERWORLD)
-                            .getEntity(buf.readUuid());
+                            .getEntityById(buf.readInt());
 
                     if (bocchiEntity.isSitting()) {
                         bocchiEntity.setSitting(false);
@@ -49,6 +52,22 @@ public class BocchiChan implements ModInitializer {
                         bocchiEntity.setSitting(true);
                         bocchiEntity.getGoalSelector().remove(bocchiEntity.wanderAroundGoal);
                     }
+                });
+
+        ServerPlayNetworking.registerGlobalReceiver(NetworkingConstants.BOCCHI_EFFECT_PACKET_ID,
+                (server, player, handler, buf, responseSender) -> {
+                    BocchiEntity bocchiEntity = (BocchiEntity) server
+                            .getWorld(World.OVERWORLD)
+                            .getEntityById(buf.readInt());
+
+                    if (bocchiEntity.hasEffect) {
+                        bocchiEntity.hasEffect = false;
+                    } else {
+                        bocchiEntity.hasEffect = true;
+                    }
+
+                    StateSaverAndLoader serverState = StateSaverAndLoader.getServerState(server);
+                    serverState.hashMap.put(bocchiEntity.getUuid().toString(), bocchiEntity.hasEffect);
                 });
     }
 }
