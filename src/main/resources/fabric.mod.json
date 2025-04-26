@@ -11,7 +11,7 @@
 		"homepage": "https://www.laffeynyaa.com/",
 		"sources": "https://github.com/LaffeyNyaa/BocchiChan"
 	},
-	"license": "Apache 2.0",
+	"license": "Apache-2.0",
 	"icon": "assets/bocchichan/icon.png",
 	"environment": "*",
 	"entrypoints": {
